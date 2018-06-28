@@ -1,0 +1,10 @@
+version: '3'
+services:
+    mongoc:
+        image: mongo:4.0.0-xenial
+        container_name: mongod2
+        command: ["mongoc", "-f", "/etc/mongoc.conf"]
+        ports:
+            - "27019:27019"
+        volumes:
+            - ./etc/mongoc.conf:/etc/mongoc.conf
