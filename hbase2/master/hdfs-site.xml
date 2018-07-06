@@ -1,15 +1,15 @@
 <configuration>
   <property>
     <name>dfs.replication</name>
-    <value>1</value>
+    <value>3</value>
   </property>
   <property>
     <name>dfs.namenode.http-address</name>
-    <value>NAMENODE:50070</value>
+    <value>master:50070</value>
   </property>
   <property>
     <name>dfs.namenode.secondary.http-address</name>
-    <value>NAMENODE:50090</value>
+    <value>master:50090</value>
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>

@@ -67,7 +67,7 @@ RUN curl -s http://ftp.riken.jp/net/apache/maven/maven-3/3.5.4/binaries/apache-m
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle \
     M2_HOME=/usr/local/maven
- 
+
 ENV PATH $PATH:$JAVA_HOME/bin:$M2_HOME/bin
 
 RUN echo '# LANG' >> ~/.bashrc \
@@ -81,4 +81,4 @@ RUN echo '# LANG' >> ~/.bashrc \
 
 RUN git clone https://github.com/brianfrankcooper/YCSB.git \
  && cd YCSB \
- && mvn -pl com.yahoo.ycsb:cassandra-binding -am clean package
+ && mvn clean package

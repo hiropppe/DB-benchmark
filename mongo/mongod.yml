@@ -16,3 +16,11 @@ services:
             - "27028:27018"
         volumes:
             - ./etc/mongod_rs1.conf:/etc/mongod_rs1.conf
+    mongod_rs2:
+        image: mongo:4.0.0-xenial
+        container_name: mongod_rs2
+        command: ["mongod", "-f", "/etc/mongod_rs2.conf"]
+        ports:
+            - "27038:27018"
+        volumes:
+            - ./etc/mongod_rs2.conf:/etc/mongod_rs2.conf
