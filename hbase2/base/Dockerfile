@@ -15,6 +15,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         software-properties-common \
         build-essential \
+        autotools-dev \
+        automake \
+        libtool \
         curl \
         wget \
         less \
@@ -80,7 +83,7 @@ RUN curl -s http://ftp.riken.jp/net/apache/maven/maven-3/3.5.4/binaries/apache-m
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle \
     M2_HOME=/usr/local/maven
- 
+
 ENV PATH $PATH:$JAVA_HOME/bin:$M2_HOME/bin
 
 RUN echo '# LANG' >> ~/.bashrc \
@@ -99,11 +102,19 @@ RUN curl -s http://ftp.kddilabs.jp/infosystems/apache/hadoop/common/hadoop-2.8.4
  && mkdir -p /var/hadoop/dfs/data \
  && mkdir -p /var/hadoop/dfs/name
 
+# Snappy
+RUN curl --insecure -L -s https://github.com/google/snappy/releases/download/1.1.3/snappy-1.1.3.tar.gz | tar -xz -C /usr/local/ \
+ && cd snappy-1.1.3 \
+ && ./configure --enable-shared \
+ && make \
+ && make install \
+ && cp /usr/local/lib/libsnappy.* /usr/local/hadoop/lib/native/
+
 ENV HADOOP_HOME=/usr/local/hadoop \
     HADOOP_YARN_HOME=/usr/local/hadoop \
     HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
 
-RUN sed -i '/^export JAVA_HOME/ s:.*:export JAVA_HOME=/usr/lib/jvm/java-8-oracle\nHADOOP_HOME=/usr/local/hadoop\n:' $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+RUN sed -i '/^export JAVA_HOME/ s:.*:export JAVA_HOME=/usr/lib/jvm/java-8-oracle\nHADOOP_HOME=/usr/local/hadoop\n:' $HADOOP_HOME/etc/hadoop/hadoop-env.s                                                                                     h
 RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop/:' $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 RUN echo '# Hadoop' >> ~/.bashrc \
@@ -124,9 +135,10 @@ ENV HBASE_HOME=/usr/local/hbase
 
 RUN sed -i '/^# export JAVA_HOME/ s:.*:export JAVA_HOME=/usr/lib/jvm/java-8-oracle:' $HBASE_HOME/conf/hbase-env.sh
 RUN sed -i '/^# export HBASE_MANAGES_ZK/ s:.*:export HBASE_MANAGES_ZK=false:' $HBASE_HOME/conf/hbase-env.sh
+RUN echo "export HBASE_LIBRARY_PATH=$HADOOP_HOME/lib/native/" >> $HBASE_HOME/conf/hbase-env.sh
 
 RUN echo '# HBase' >> ~/.bashrc \
- && echo "export HBASE_HOME=$HBASE_HOME" >> ~/.bashrc 
+ && echo "export HBASE_HOME=$HBASE_HOME" >> ~/.bashrc
 
 RUN echo '# PATH' >> ~/.bashrc \
  && echo 'export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$HBASE_HOME/bin' >> ~/.bashrc
