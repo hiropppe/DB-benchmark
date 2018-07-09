@@ -82,3 +82,8 @@ RUN echo '# LANG' >> ~/.bashrc \
 RUN git clone https://github.com/brianfrankcooper/YCSB.git \
  && cd YCSB \
  && mvn clean package
+
+WORKDIR YCSB
+
+RUN mkdir conf
+COPY hbase-site.xml conf/
