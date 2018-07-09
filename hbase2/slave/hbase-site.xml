@@ -11,6 +11,34 @@
     <property>
         <name>hbase.zookeeper.quorum</name>
         <value>zoo</value>
+        <!--
+        <value>zoo1,zoo2,zoo3</value>
+        -->
+    </property>
+    <property>
+        <name>hfile.block.cache.size</name>
+        <value>0.4</value>
+        <description>Percentage of maximum heap (-Xmx setting) to allocate to block cache
+            used by a StoreFile. Default of 0.4 means allocate 40%.
+            Set to 0 to disable but it's not recommended; you need at least
+            enough cache to hold the storefile indices.</description>
+    </property>
+    <property>
+        <name>hbase.regionserver.global.memstore.size</name>
+        <value>0.4</value>
+        <description>Maximum size of all memstores in a region server before new
+          updates are blocked and flushes are forced. Defaults to 40% of heap (0.4).
+          Updates are blocked and flushes are forced until size of all memstores
+          in a region server hits hbase.regionserver.global.memstore.size.lower.limit.
+          The default value in this configuration has been intentionally left empty in order to
+          honor the old hbase.regionserver.global.memstore.upperLimit property if present.
+        </description>
+    </property>
+    <property>
+        <name>hbase.bucketcache.size</name>
+        <value>38912</value>
+        <description>A float that EITHER represents a percentage of total heap memory
+        size to give to the cache (if &lt; 1.0) OR, it is the total capacity in
+        megabytes of BucketCache. Default: 0.0</description>
     </property>
 </configuration>
-

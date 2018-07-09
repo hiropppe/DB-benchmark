@@ -1,10 +1,12 @@
 FROM hbase/base:2.0.1
 
+COPY hadoop-env.sh $HADOOP_HOME/etc/hadoop/
 COPY core-site.xml $HADOOP_HOME/etc/hadoop/
 COPY hdfs-site.xml $HADOOP_HOME/etc/hadoop/
 COPY mapred-site.xml $HADOOP_HOME/etc/hadoop/
 COPY yarn-site.xml.template $HADOOP_HOME/etc/hadoop/
 
+COPY hbase-env.sh $HBASE_HOME/conf/
 COPY hbase-site.xml $HBASE_HOME/conf/
 
 COPY bootstrap.sh /etc/bootstrap.sh

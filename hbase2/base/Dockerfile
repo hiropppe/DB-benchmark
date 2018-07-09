@@ -114,9 +114,6 @@ ENV HADOOP_HOME=/usr/local/hadoop \
     HADOOP_YARN_HOME=/usr/local/hadoop \
     HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
 
-RUN sed -i '/^export JAVA_HOME/ s:.*:export JAVA_HOME=/usr/lib/jvm/java-8-oracle\nHADOOP_HOME=/usr/local/hadoop\n:' $HADOOP_HOME/etc/hadoop/hadoop-env.sh
-RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop/:' $HADOOP_HOME/etc/hadoop/hadoop-env.sh
-
 RUN echo '# Hadoop' >> ~/.bashrc \
  && echo "export HADOOP_HOME=$HADOOP_HOME" >> ~/.bashrc \
  && echo 'export HADOOP_HDFS_HOME=$HADOOP_HOME' >> ~/.bashrc \
@@ -132,10 +129,6 @@ RUN curl -s http://ftp.jaist.ac.jp/pub/apache/hbase/2.0.1/hbase-2.0.1-bin.tar.gz
  && ln -s ./hbase-2.0.1/ hbase
 
 ENV HBASE_HOME=/usr/local/hbase
-
-RUN sed -i '/^# export JAVA_HOME/ s:.*:export JAVA_HOME=/usr/lib/jvm/java-8-oracle:' $HBASE_HOME/conf/hbase-env.sh
-RUN sed -i '/^# export HBASE_MANAGES_ZK/ s:.*:export HBASE_MANAGES_ZK=false:' $HBASE_HOME/conf/hbase-env.sh
-RUN echo "export HBASE_LIBRARY_PATH=$HADOOP_HOME/lib/native/" >> $HBASE_HOME/conf/hbase-env.sh
 
 RUN echo '# HBase' >> ~/.bashrc \
  && echo "export HBASE_HOME=$HBASE_HOME" >> ~/.bashrc
