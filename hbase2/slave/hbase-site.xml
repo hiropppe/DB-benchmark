@@ -16,6 +16,22 @@
         -->
     </property>
     <property>
+        <name>hbase.regionserver.handler.count</name>
+        <value>32</value>
+        <description>Count of RPC Listener instances spun up on RegionServers.
+          Same property is used by the Master for count of master handlers.
+          Too many handlers can be counter-productive. Make it a multiple of
+          CPU count. If mostly read-only, handlers count close to cpu count
+          does well. Start with twice the CPU count and tune from there.</description>
+    </property>
+    <property>
+        <name>hbase.hregion.max.filesize</name>
+        <value>10737418240</value>
+        <description>
+        Maximum HFile size. If the sum of the sizes of a region's HFiles has grown to exceed this
+        value, the region is split in two.</description>
+    </property>
+    <property>
         <name>hfile.block.cache.size</name>
         <value>0.4</value>
         <description>Percentage of maximum heap (-Xmx setting) to allocate to block cache
