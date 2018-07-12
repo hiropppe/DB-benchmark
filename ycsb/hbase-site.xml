@@ -15,4 +15,8 @@
         <value>zoo1,zoo2,zoo3</value>
         -->
     </property>
+    <property>    
+        <name>hbase.client.scanner.caching</name>    
+        <value>10000</value>  
+    </property>
 </configuration>
