@@ -135,3 +135,15 @@ RUN echo '# HBase' >> ~/.bashrc \
 
 RUN echo '# PATH' >> ~/.bashrc \
  && echo 'export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$HBASE_HOME/bin' >> ~/.bashrc
+
+# Install Scala
+RUN wget https://downloads.lightbend.com/scala/2.12.6/scala-2.12.6.deb \
+ && dpkg -i scala-2.12.6.deb
+
+RUN apt-get install -y apt-transport-https
+
+# Install SBT
+RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list \
+ && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823 \
+ && apt-get update \
+ && apt-get install -y sbt
