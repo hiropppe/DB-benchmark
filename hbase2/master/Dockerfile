@@ -18,3 +18,12 @@ ENV BOOTSTRAP /etc/bootstrap.sh
 WORKDIR $HBASE_HOME
 
 CMD ["/etc/bootstrap.sh", "-d"]
+
+# ssh
+EXPOSE 2122
+# namenode
+EXPOSE 9000
+# hmaster
+EXPOSE 16000
+# yarn resource manager
+EXPOSE 8030 8031 8032 8033

@@ -1,0 +1,26 @@
+version: '3'
+services:
+    master:
+        image: hbase/master:2.0.1
+        container_name: master
+        ports:
+            - "50070:50070"
+            - "16010:16010"
+            - "8088:8088"
+            - "8033:8033"
+    slave:
+        image: hbase/slave:2.0.1
+        container_name: slave
+        ports:
+            - "50075:50075"
+    zoo:
+        image: zookeeper:3.4
+        container_name: zoo
+    spark:
+        image: spark/hbase:2.3.1
+        container_name: spark
+        tty: true
+    ycsb:
+        image: ycsb
+        container_name: ycsb
+        tty: true

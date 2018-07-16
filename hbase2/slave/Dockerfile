@@ -16,3 +16,16 @@ ENV BOOTSTRAP /etc/bootstrap.sh
 WORKDIR $HBASE_HOME
 
 CMD ["/etc/bootstrap.sh", "-d"]
+
+# ssh
+EXPOSE 2122
+# datanode
+EXPOSE 50010 50020
+# hmaster (backup)
+EXPOSE 16000
+# region server
+EXPOSE 16020 16030
+# node manager
+EXPOSE 8040 8042
+# node manager ?
+EXPOSE 13562 45059
