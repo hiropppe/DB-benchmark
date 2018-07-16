@@ -13,7 +13,8 @@ RUN git clone https://github.com/hortonworks-spark/shc.git \
 ENV SPARK_HOME=/usr/local/spark
 
 RUN echo '# Spark' >> ~/.bashrc \
- && echo "export SPARK_HOME=$SPARK_HOME" >> ~/.bashrc
+ && echo "export SPARK_HOME=$SPARK_HOME" >> ~/.bashrc \
+ && echo 'export SPARK_DIST_CLASSPATH=$(hadoop classpath)' >> ~/.bashrc
 
 RUN echo '# PATH' >> ~/.bashrc \
  && echo 'export PATH=$PATH:$SPARK_HOME/bin' >> ~/.bashrc
