@@ -23,4 +23,6 @@ services:
     ycsb:
         image: ycsb
         container_name: ycsb
+        ports:
+            - "8888:8888"
         tty: true
