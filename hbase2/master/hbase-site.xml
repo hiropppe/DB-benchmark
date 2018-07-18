@@ -15,4 +15,8 @@
         <value>zoo1,zoo2,zoo3</value>
         -->
     </property>
+    <property>
+        <name>hbase.unsafe.stream.capability.enforce</name>
+        <value>false</value>
+    </property>
 </configuration>

@@ -11,7 +11,7 @@ cd $HADOOP_HOME/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; cu
 /etc/init.d/ssh start
  
 $HADOOP_HOME/bin/hdfs namenode -format ycsb
-$HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR --script hdfs start namenode
+$HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR start namenode
 $HADOOP_YARN_HOME/sbin/yarn-daemon.sh --config $HADOOP_CONF_DIR start resourcemanager
 
 if [[ $1 == "-d" ]]; then

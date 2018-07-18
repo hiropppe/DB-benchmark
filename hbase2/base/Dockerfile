@@ -96,9 +96,9 @@ RUN echo '# LANG' >> ~/.bashrc \
  && echo "export PATH=$PATH" >> ~/.bashrc
 
 # Hadoop
-RUN curl -s http://ftp.kddilabs.jp/infosystems/apache/hadoop/common/hadoop-2.8.4/hadoop-2.8.4.tar.gz | tar -xz -C /usr/local/ \
+RUN curl -s http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.0.3/hadoop-3.0.3.tar.gz | tar -xz -C /usr/local/ \
  && cd /usr/local \
- && ln -s ./hadoop-2.8.4/ hadoop \
+ && ln -s ./hadoop-3.0.3/ hadoop \
  && mkdir -p /var/hadoop/dfs/data \
  && mkdir -p /var/hadoop/dfs/name
 
@@ -137,8 +137,8 @@ RUN echo '# PATH' >> ~/.bashrc \
  && echo 'export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$HBASE_HOME/bin' >> ~/.bashrc
 
 # Install Scala
-RUN wget https://downloads.lightbend.com/scala/2.12.6/scala-2.12.6.deb \
- && dpkg -i scala-2.12.6.deb
+RUN wget https://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.deb \
+ && dpkg -i scala-2.11.8.deb
 
 RUN apt-get install -y apt-transport-https
 

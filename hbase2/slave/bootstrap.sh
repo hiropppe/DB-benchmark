@@ -14,7 +14,7 @@ cd $HADOOP_HOME/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; cu
 sed s/HOSTNAME/$HOSTNAME/ /usr/local/hadoop/etc/hadoop/yarn-site.xml.template > /usr/local/hadoop/etc/hadoop/yarn-site.xml
  
 # start daemons
-$HADOOP_HOME/sbin/hadoop-daemons.sh --config $HADOOP_CONF_DIR --script hdfs start datanode
+$HADOOP_HOME/sbin/hadoop-daemons.sh --config $HADOOP_CONF_DIR start datanode
 $HADOOP_YARN_HOME/sbin/yarn-daemons.sh --config $HADOOP_CONF_DIR start nodemanager
 
 if [[ $1 == "-d" ]]; then

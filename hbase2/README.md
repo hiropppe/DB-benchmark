@@ -11,7 +11,7 @@ $ sh ./slave.sh <slave_id>
 ```
 
 #### Run Zookeeper
-Single server
+Single keeper
 ```
 $ sh ./zoo.sh
 ```
@@ -32,7 +32,7 @@ root@master:/usr/local/hbase-2.0.1# bash ./bin/start-hbase.sh
 ```
 root@master:/usr/local/hbase-2.0.1# hbase shell
 hbase(main):003:0> n_splits = 300
-hbase(main):003:0> create 'usertable', 'family', {SPLITS => (1..n_splits).map {|i| "user#{1000+i*(9999-1000)/n_splits}"}}
+hbase(main):003:0> create 'usertable', {NAME => 'family', COMPRESSION => 'SNAPPY'}, {SPLITS => (1..n_splits).map {|i| "user#{1000+i*(9999-1000)/n_splits}"}}
 ```
 
 ## YCSB
