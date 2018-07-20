@@ -8,9 +8,9 @@ RUN curl -s https://archive.apache.org/dist/spark/spark-2.3.1/spark-2.3.1-bin-wi
 # spark hbase connector (apache)
 # JavaHBaseBulkPutExample
 # spark-submit --master yarn --deploy-mode cluster --files /usr/local/hbase/conf/hbase-site.xml --jars /usr/local/hbase/lib/hbase-client-2.0.1.jar,/usr/local/hbase/lib/hbase-server-2.0.1.jar,/usr/local/hbase/lib/hbase-common-2.0.1.jar,/usr/local/hbase/lib/hbase-protocol-2.0.1.jar,/usr/local/hbase/lib/hbase-protocol-shaded-2.0.1.jar,/usr/local/hbase/lib/hbase-mapreduce-2.0.1.jar,/usr/local/hbase/lib/hbase-it-2.0.1.jar,/tmp/hbase-shaded-miscellaneous-2.1.0.jar,/usr/local/hbase/lib/hbase-shaded-miscellaneous-2.1.0.jar,/usr/local/hbase/lib/hbase-shaded-netty-2.1.0.jar,/usr/local/hbase/lib/hbase-shaded-protobuf-2.1.0.jar,/usr/local/hbase/lib/protobuf-java-2.5.0.jar  --class org.apache.hadoop.hbase.spark.example.hbasecontext.JavaHBaseBulkPutExample hbase-spark/target/hbase-spark-3.0.0-SNAPSHOT.jar usertable family
-RUN git clone --depth 1 https://github.com/apache/hbase.git \
- && cd hbase \
- && mvn install -DskipTests
+#RUN git clone --depth 1 https://github.com/apache/hbase.git \
+# && cd hbase \
+# && mvn install -DskipTests
 
 # spark hbase connector (hortonworks)
 RUN git clone --depth 1 https://github.com/hortonworks-spark/shc.git \
@@ -61,7 +61,14 @@ RUN mvn dependency:get -DgroupId=com.fasterxml.jackson.core -DartifactId=jackson
  && mvn dependency:get -DgroupId=com.squareup.okio -DartifactId=okio -Dversion=1.4.0 \
  && mvn dependency:get -DgroupId=io.netty -DartifactId=netty -Dversion=3.10.5.Final \
  && mvn dependency:get -DgroupId=com.clearspring.analytics -DartifactId=stream -Dversion=2.9.5 \
- && mvn dependency:get -DgroupId=it.unimi.dsi -DartifactId=fastutil -Dversion=7.0.6
+ && mvn dependency:get -DgroupId=it.unimi.dsi -DartifactId=fastutil -Dversion=7.0.6 \
+ && mvn dependency:get -DgroupId=org.apache.commons -DartifactId=commons-lang3 -Dversion=3.6 \
+ && mvn dependency:get -DgroupId=org.jruby.joni -DartifactId=joni -Dversion=2.1.11 \
+ && mvn dependency:get -DgroupId=io.dropwizard.metrics -DartifactId=metrics-core -Dversion=3.2.1 \
+ && mvn dependency:get -DgroupId=com.fasterxml.jackson.core -DartifactId=jackson-databind -Dversion=2.9.2 \
+ && mvn dependency:get -DgroupId=com.fasterxml.jackson.core -DartifactId=jackson-core -Dversion=2.9.2 \
+ && mvn dependency:get -DgroupId=org.glassfish -DartifactId=javax.el -Dversion=3.0.1-b08 \
+ && mvn dependency:get -DgroupId=org.apache.commons -DartifactId=commons-math3 -Dversion=3.6.1
 
 ENV SPARK_HOME=/usr/local/spark
 
@@ -76,4 +83,14 @@ COPY core-site.xml $HADOOP_HOME/etc/hadoop/
 COPY yarn-site.xml $HADOOP_HOME/etc/hadoop/
 COPY hbase-site.xml $HBASE_HOME/conf/
 
-WORKDIR $SPARK_HOME
+RUN pip --no-cache-dir install findspark
+
+RUN ipython profile create pyspark
+COPY 00-pyspark-setup.py /root/.ipython/profile_pyspark/startup/
+
+RUN mkdir examples
+
+COPY examples/shc_read_example_by_findspark.ipynb /root/examples/
+COPY examples/shc_read_submit_example.py /root/examples/
+
+WORKDIR /root
