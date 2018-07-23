@@ -1,0 +1,18 @@
+version: '3'
+services:
+    mongod_rs2:
+        image: mongo:4.0.0-xenial
+        container_name: mongod_rs2
+        command: ["mongod", "-f", "/etc/mongod_rs2.conf"]
+        ports:
+            - "27038:27018"
+        volumes:
+            - ./etc/mongod_rs2.conf:/etc/mongod_rs2.conf
+    mongod_rs0:
+        image: mongo:4.0.0-xenial
+        container_name: mongod_rs0
+        command: ["mongod", "-f", "/etc/mongod_rs0.conf"]
+        ports:
+            - "27018:27018"
+        volumes:
+            - ./etc/mongod_rs0.conf:/etc/mongod_rs0.conf

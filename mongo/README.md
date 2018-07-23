@@ -1,77 +1,71 @@
-test memo
+## Cluster Setup
 
-#### Run mongod (rs0, rs1, rs2)
+### Run shard server (rs0, rs1, rs2)
 ```
-$ docker-compose -f mongod.yml up -d
-```
-
-#### Run mongoc
-```
-$ docker-compose -f mongoc.yml up -d
+# Example for 1st shard server (node0)
+$ docker-compose -f shardsvr0.yml up -d
 ```
 
-#### Run mongos
+### Run router (mongos) with config server (mongoc)
 ```
-$ docker-compose -f mongos.yml up -d
+$ docker-compose -f router.yml up -d
 ```
 
-#### ReplicaSet 0
+### Initialize replicaSet
+ReplicaSet 0
 ```
 > config = {_id: 'rs0',
      members: [
-       {_id: 0, host: '<1st mongod ip>:27018'},
-       {_id: 1, host: '<2nd mongod ip>:27018'},
-       {_id: 2, host: '<3rd mongod ip>:27018'}
+       {_id: 0, host: '<1st shard server ip>:27018'},
+       {_id: 1, host: '<4th shard server ip>:27018', priority: 0.5}
      ]
    }
 >rs.initiate(config)
 ```
 
-#### ReplicaSet 1
+ReplicaSet 1
 ```
 > config = {_id: 'rs1',
      members: [
-       {_id: 0, host: '<1st mongod ip>:27028'},
-       {_id: 1, host: '<2nd mongod ip>:27028'},
-       {_id: 2, host: '<3rd mongod ip>:27028'}
+       {_id: 0, host: '<2nd shard server ip>:27028'},
+       {_id: 1, host: '<1st shard server ip>:27028', priority: 0.5}
      ]
    }
 > rs.initiate(config)
 ```
 
-#### ReplicaSet 2
+ReplicaSet 2
 ```
 > config = {_id: 'rs2',
      members: [
-       {_id: 0, host: '<1st mongod ip>:27038'},
-       {_id: 1, host: '<2nd mongod ip>:27038'},
-       {_id: 2, host: '<3rd mongod ip>:27038'}
+       {_id: 0, host: '<3rd shard server ip>:27038'},
+       {_id: 1, host: '<2nd shard server ip>:27038', priority: 0.5}
      ]
    }
 > rs.initiate(config)
 ```
 
-#### Config server
+Config
 ```
 > config = {_id: 'rsconf',
      members: [
-       {_id: 0, host: '<mongoc ip>:27019'},
+       {_id: 0, host: '<config server ip>:27019'},
      ]
    }
 > rs.initiate(config)
 ```
 
-#### mongos
+### Setup sharding
 ```
-mongos> sh.addShard( "rs0/<one of mongod ip>:27018")
-mongos> sh.addShard( "rs1/<one of mongod ip>:27028")
-mongos> sh.addShard( "rs2/<one of mongod ip>:27038")
+mongos> sh.addShard( "rs0/<1st shard server ip>:27018")
+mongos> sh.addShard( "rs1/<2nd shard server ip>:27028")
+mongos> sh.addShard( "rs2/<3rd shard server ip>:27038")
 mongos> sh.enableSharding("ycsb")
-mongos> sh.shardCollection("ycsb.usertable", { _id : "hashed" } )
+mongos> sh.shardCollection("ycsb.usertable", { _id : 1 } )
 ```
 
-## YCSB
+## Benchmark
 ```
-# ./bin/ycsb load mongodb -P workloads/workloada -p mongodb.url=mongodb://<mongos ip>:27017/ycsb?w=0 -s
-# ./bin/ycsb run mongodb -P workloads/workloada -p mongodb.url=mongodb://<mongos ip>:27017/ycsb?w=0 -s
+# ./bin/ycsb load mongodb -P workloads/workloada -p mongodb.url=mongodb://<router server id>:27017/ycsb?w=0 -s
+# ./bin/ycsb run mongodb -P workloads/workloada -p mongodb.url=mongodb://<router server id>:27017/ycsb?w=0 -s
 ```
