@@ -1,5 +1,7 @@
 FROM hbase/base:2.0.1
 
+WORKDIR /root
+
 # spark
 RUN curl -s https://archive.apache.org/dist/spark/spark-2.3.1/spark-2.3.1-bin-without-hadoop.tgz | tar -xz -C /usr/local/ \
  && cd /usr/local \
@@ -82,6 +84,7 @@ RUN echo '# PATH' >> ~/.bashrc \
 COPY core-site.xml $HADOOP_HOME/etc/hadoop/
 COPY yarn-site.xml $HADOOP_HOME/etc/hadoop/
 COPY hbase-site.xml $HBASE_HOME/conf/
+COPY hbase-site.xml $SPARK_HOME/conf/
 
 RUN pip --no-cache-dir install findspark
 
@@ -92,5 +95,3 @@ RUN mkdir examples
 
 COPY examples/shc_read_example_by_findspark.ipynb /root/examples/
 COPY examples/shc_read_submit_example.py /root/examples/
-
-WORKDIR /root

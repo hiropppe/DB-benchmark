@@ -1,4 +1,4 @@
-test memo
+### Setup Cluster
 
 #### Run NameNode
 ```
@@ -35,7 +35,7 @@ hbase(main):003:0> n_splits = 300
 hbase(main):003:0> create 'usertable', {NAME => 'family', COMPRESSION => 'SNAPPY'}, {SPLITS => (1..n_splits).map {|i| "user#{1000+i*(9999-1000)/n_splits}"}}
 ```
 
-## YCSB
+### Benchmark
 ```
 # ./bin/ycsb load hbase20 -P workloads/workloada -cp ./conf -p table=usertable -p columnfamily=family -s
 # ./bin/ycsb run hbase20 -P workloads/workloada -cp ./conf -p table=usertable -p columnfamily=family -s
