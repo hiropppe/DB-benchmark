@@ -13,6 +13,7 @@ RUN apt-get update \
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        apt-transport-https \
         software-properties-common \
         build-essential \
         autotools-dev \
@@ -139,8 +140,6 @@ RUN echo '# PATH' >> ~/.bashrc \
 # Install Scala
 RUN wget https://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.deb \
  && dpkg -i scala-2.11.8.deb
-
-RUN apt-get install -y apt-transport-https
 
 # Install SBT
 RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list \
