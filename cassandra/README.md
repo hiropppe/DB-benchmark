@@ -1,11 +1,11 @@
-test memo
+### Cluster Setup
 
 #### Run first (seed) node
 ```
 $ sh ./seed.sh
 ```
 
-### Run other nodes
+#### Run other nodes
 ```
 $ sh ./csdr.sh <first server IP>
 ```
@@ -21,7 +21,7 @@ $ docker run -it --link csdr:cassandra --rm cassandra:3.11.2 cqlsh cassandra
 Connected to Test Cluster at cassandra:9042.
 [cqlsh 5.0.1 | Cassandra 3.11.2 | CQL spec 3.4.4 | Native protocol v4]
 Use HELP for help.
-cqlsh> CREATE KEYSPACE ycsb WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor': 3 };
+cqlsh> CREATE KEYSPACE ycsb WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor': 2 };
 cqlsh> USE ycsb;
 cqlsh:ycsb>
 cqlsh:ycsb> CREATE TABLE usertable (
@@ -39,8 +39,9 @@ cqlsh:ycsb> CREATE TABLE usertable (
 ``
 ```
 
-#### YCSB
+### Benchmark
 ```
-# ./bin/ycsb run cassandra2-cql -P workloads/workloada -p "hosts=<ip1> <ip2> <ip3>"
-# ./bin/ycsb run cassandra2-cql -P workloads/workloada -p "hosts=<ip1> <ip2> <ip3>"
+# ./bin/ycsb load cassandra2-cql -P workloads/workloada -p "hosts=<ip1>,<ip2>, ..."
+# ./bin/ycsb run cassandra2-cql -P workloads/workloada -p "hosts=<ip1>,<ip2>, ..."
+```
 ```
