@@ -20,7 +20,7 @@ CMD ["/etc/bootstrap.sh", "-d"]
 # ssh
 EXPOSE 2122
 # datanode
-EXPOSE 50010 50020
+EXPOSE 9864 9865 9866 9867
 # hmaster (backup)
 EXPOSE 16000
 # region server
