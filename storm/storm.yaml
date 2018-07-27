@@ -1,0 +1,4 @@
+storm.zookeeper.servers: [bt1.jp21.com]
+nimbus.seeds: [bt1.jp21.com]
+storm.log.dir: "/logs"
+storm.local.dir: "/data"
