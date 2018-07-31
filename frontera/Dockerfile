@@ -66,7 +66,7 @@ RUN echo '# JDK' >> ~/.bashrc \
 RUN wget https://downloads.lightbend.com/scala/2.11.12/scala-2.11.12.deb \
  && dpkg -i scala-2.11.12.deb
 
-RUN curl -s http://ftp.meisei-u.ac.jp/mirror/apache/dist/kafka/1.1.1/kafka_2.11-1.1.1.tgz | tar -xz -C /usr/local/ \
+RUN curl -s http://ftp.kddilabs.jp/infosystems/apache/kafka/1.1.1/kafka_2.11-1.1.1.tgz | tar -xz -C /usr/local/ \
  && cd /usr/local \
  && ln -s kafka_2.11-1.1.1/ kafka
 
@@ -76,12 +76,15 @@ RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
         Scrapy==1.5.1 \
-        frontera[distributed,zeromq,sql,hbase]==0.7.1 \
+        frontera[distributed,zeromq,kafka,sql,hbase]==0.7.1 \
         jedi \
         flake8 \
         autopep8 \
         && \
         python3 -m ipykernel.kernelspec
+
+RUN pip3 uninstall -y kafka-python \
+ && pip3 --no-cache-dir install kafka-python==1.3.5 --no-cache-dir
 
 RUN echo '# LANG' >> ~/.bashrc \
  && echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc
