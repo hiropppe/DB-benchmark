@@ -16,6 +16,14 @@ $ sh ./zookeeper.sh
 root@bt4:/usr/local/kafka# bin/kafka-server-start.sh config/server.properties
 ```
 
+#### Create all topics needed for Kafka message bus
+```
+root@bt4:/usr/local/kafka# bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic frontier-done
+root@bt4:/usr/local/kafka# bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic frontier-todo
+root@bt4:/usr/local/kafka# bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic frontier-score
+
+```
+
 #### Starting the cluster
 ```
 # git clone http://192.168.88.180:18080/gitbucket/git/RD/frontera-clustered-crawler.git
@@ -24,7 +32,7 @@ root@bt4:/usr/local/kafka# bin/kafka-server-start.sh config/server.properties
 
 DB worker
 ```
-root@bt1:~/frontera-clustered-crawler# python3 -m frontera.worker.db --config bc.config.dbw --no-incoming
+root@bt1:~/frontera-clustered-crawler# python3 -m frontera.worker.db --config bc.config.dbw --partitions 0
 ```
 
 Strategy worker
@@ -34,5 +42,6 @@ root@bt2:~/frontera-clustered-crawler# python3 -m frontera.worker.strategy --con
 
 Spider
 ```
-root@bt3:~/frontera-clustered-crawler# scrapy crawl bc -L INFO -s SEEDS_SOURCE='seeds.txt' -s SPIDER_PARTITION_ID=0 
+root@bt3: python3 -m frontera.utils.add_seeds --config bc.config.dbw --seeds-file seeds.txt
+root@bt3:~/frontera-clustered-crawler# scrapy crawl bc -L INFO -s SPIDER_PARTITION_ID=0 
 ```

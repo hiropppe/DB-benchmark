@@ -75,8 +75,8 @@ RUN pip3 install --no-cache-dir -U setuptools
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
-        Scrapy==1.5.1 \
-        frontera[distributed,zeromq,kafka,sql,hbase]==0.7.1 \
+        Scrapy \
+        frontera[distributed,zeromq,kafka,sql,hbase] \
         jedi \
         flake8 \
         autopep8 \
@@ -88,5 +88,10 @@ RUN pip3 uninstall -y kafka-python \
 
 RUN echo '# LANG' >> ~/.bashrc \
  && echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc
+
+RUN mkdir -p /root/.vim/bundle \
+ && git clone https://github.com/Shougo/neobundle.vim /root/.vim/bundle/neobundle.vim
  
+COPY ./vimrc /root/.vimrc
+
 WORKDIR /root
