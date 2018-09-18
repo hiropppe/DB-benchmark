@@ -13,16 +13,16 @@ services:
         container_name: slave
         ports:
             - "50075:50075"
-    zoo:
+    zookeeper:
         image: zookeeper:3.4
-        container_name: zoo
+        container_name: zookeeper
     spark:
         image: spark/hbase:2.3.1
         container_name: spark
         tty: true
-    ycsb:
-        image: ycsb
-        container_name: ycsb
-        ports:
-            - "8888:8888"
-        tty: true
+#    ycsb:
+#        image: ycsb
+#        container_name: ycsb
+#        ports:
+#            - "8888:8888"
+#        tty: true
