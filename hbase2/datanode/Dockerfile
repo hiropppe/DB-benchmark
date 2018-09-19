@@ -15,9 +15,13 @@ CMD ["/bin/bash"]
 
 # ssh
 EXPOSE 2122
-# namenode
-EXPOSE 9000
-# hmaster
-EXPOSE 16000
-# yarn resource manager
-#EXPOSE 8030 8031 8032 8033
+# datanode
+EXPOSE 9864 9865 9866 9867
+# hmaster (backup)
+#EXPOSE 16000
+# region server
+#EXPOSE 16020 16030
+# node manager
+#EXPOSE 8040 8042
+# node manager ?
+#EXPOSE 13562 45059
