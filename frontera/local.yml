@@ -1,0 +1,18 @@
+version: '3.0'
+services:
+    dbw:
+        image: frontera:latest
+        container_name: dbw
+        command: ["python3", "-m", "frontera.worker.db", "--config", "bfs.config.dbw", "--partitions", "0"]
+    sw:
+        image: frontera:latest
+        container_name: dbw
+        command: ["python3", "-m", "frontera.worker.strategy", "--config", "bfs.config.sw", "--partition-id", "0"]
+        depends_on:
+            - "dbw"
+    spider:
+        image: frontera:latest
+        container_name: spider
+        command: ["scrapy", "crawl", "bfs", "-L", "INFO", "-s", "SPIDER_PARTITION_ID=0"]
+        depends_on:
+            - "sw"
