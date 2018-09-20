@@ -1,7 +1,7 @@
-FROM hadoop/common:3.0.3
+FROM hbase/common:2.0.2
 
 # allow empty password root ssh
-RUN echo "Port 2122" >> /etc/ssh/sshd_config \
+RUN echo "Port 2322" >> /etc/ssh/sshd_config \
  && sed -ri 's/^PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config \
  && sed -ri 's/^PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed -ri 's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config \
@@ -10,15 +10,14 @@ RUN echo "Port 2122" >> /etc/ssh/sshd_config \
 # ssh without host key cheking
 RUN mkdir -p ~/.ssh \
  && echo "Host *" > ~/.ssh/config \
- && echo " Port 2122" >> ~/.ssh/config \
+ && echo " Port 2322" >> ~/.ssh/config \
  && echo " StrictHostKeyChecking no" >> ~/.ssh/config
 
-COPY hadoop-env.sh $HADOOP_HOME/etc/hadoop/
-COPY core-site.xml $HADOOP_HOME/etc/hadoop/
-COPY hdfs-site.xml $HADOOP_HOME/etc/hadoop/
-COPY mapred-site.xml $HADOOP_HOME/etc/hadoop/
+COPY hbase-env.sh $HBASE_HOME/conf/
+COPY hbase-site.xml $HBASE_HOME/conf/
+COPY regionservers $HBASE_HOME/conf/
 
-ENV PATH $PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+ENV PATH $PATH:$HBASE_HOME/bin
 
 COPY docker-entrypoint.sh /
 RUN chown root:root /docker-entrypoint.sh && chmod 700 /docker-entrypoint.sh
@@ -27,6 +26,6 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/bin/bash"]
 
 # ssh
-EXPOSE 2122
-# namenode
-EXPOSE 9000
+EXPOSE 2322
+# hmaster
+EXPOSE 16000

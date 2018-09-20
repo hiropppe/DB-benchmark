@@ -19,8 +19,4 @@
         <name>hbase.unsafe.stream.capability.enforce</name>
         <value>false</value>
     </property>
-    <property>
-        <name>phoenix.schema.isNamespaceMappingEnabled</name>
-        <value>true</value>
-    </property>
 </configuration>

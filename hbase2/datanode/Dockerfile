@@ -1,4 +1,17 @@
-FROM hbase/core:2.0.1
+FROM hadoop/common:3.0.3
+
+# allow empty password root ssh
+RUN echo "Port 2122" >> /etc/ssh/sshd_config \
+ && sed -ri 's/^PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config \
+ && sed -ri 's/^PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+ && sed -ri 's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config \
+ && passwd -d root
+
+# ssh without host key cheking
+RUN mkdir -p ~/.ssh \
+ && echo "Host *" > ~/.ssh/config \
+ && echo " Port 2122" >> ~/.ssh/config \
+ && echo " StrictHostKeyChecking no" >> ~/.ssh/config
 
 COPY hadoop-env.sh $HADOOP_HOME/etc/hadoop/
 COPY core-site.xml $HADOOP_HOME/etc/hadoop/
@@ -17,11 +30,3 @@ CMD ["/bin/bash"]
 EXPOSE 2122
 # datanode
 EXPOSE 9864 9865 9866 9867
-# hmaster (backup)
-#EXPOSE 16000
-# region server
-#EXPOSE 16020 16030
-# node manager
-#EXPOSE 8040 8042
-# node manager ?
-#EXPOSE 13562 45059

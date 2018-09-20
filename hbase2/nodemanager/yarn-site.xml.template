@@ -1,7 +1,7 @@
 <configuration>
   <property>
     <name>yarn.resourcemanager.hostname</name>
-    <value>master</value>
+    <value>resource</value>
   </property>
   <property>
     <name>yarn.application.classpath</name>

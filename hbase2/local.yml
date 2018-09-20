@@ -1,28 +1,89 @@
-version: '3'
+## For first time you must format HDFS by following command.
+# docker run --rm -v hbase2_hdfs-image:/var/hadoop/dfs/name hdfs/name:3.0.3 namenode -format -force
+version: '3.0'
 services:
-    master:
-        image: hbase/master:2.0.1
-        container_name: master
+    name:
+        image: hdfs/name:3.0.3
+        container_name: name
+        command: ["start", "namenode"]
         ports:
             - "50070:50070"
-            - "16010:16010"
-            - "8088:8088"
-            - "8033:8033"
-    slave:
-        image: hbase/slave:2.0.1
-        container_name: slave
+        volumes:
+            - "hdfs-image:/var/hadoop/dfs/name"
+            - "/tmp/hadoop/logs:/usr/local/hadoop/logs"
+    data:
+        image: hdfs/data:3.0.3
+        container_name: data
+        command: ["start", "datanode"]
         ports:
             - "50075:50075"
+        depends_on:
+            - "name"
+        volumes:
+            - "hdfs-data:/var/hadoop/dfs/data"
+            - "/tmp/hadoop/logs:/usr/local/hadoop/logs"
+    resource:
+        image: yarn/resource:3.0.3
+        container_name: resource
+        command: ["start"]
+        ports:
+            - "8088:8088"
+            - "8090:8090"
+        volumes:
+            - "/tmp/yarn/logs:/usr/local/hadoop/logs"
+    node:
+        image: yarn/node:3.0.3
+        container_name: node
+        command: ["start"]
+        ports:
+            - "8042:8042"
+        depends_on:
+            - "resource"
+        volumes:
+            - "/tmp/yarn/logs:/usr/local/hadoop/logs"
     zookeeper:
         image: zookeeper:3.4
         container_name: zookeeper
-    spark:
-        image: spark/hbase:2.3.1
-        container_name: spark
-        tty: true
-#    ycsb:
-#        image: ycsb
-#        container_name: ycsb
-#        ports:
-#            - "8888:8888"
-#        tty: true
+    hmaster:
+        image: hbase/hmaster:2.0.2
+        container_name: hmaster
+        command: ["start"]
+        ports:
+            - "16010:16010"
+        depends_on:
+            - "name"
+            - "zookeeper"
+        volumes:
+            - "/tmp/hbase/logs:/usr/local/hbase/logs"
+    hmaster-backup:
+        image: hbase/hmaster:2.0.2
+        container_name: hmaster-backup
+        command: ["start"]
+        ports:
+            - "16020:16010"
+        depends_on:
+            - "hmaster"
+        volumes:
+            - "/tmp/hbase/logs:/usr/local/hbase/logs"
+    region:
+        image: hbase/region:2.0.2
+        container_name: region
+        command: ["start"]
+        ports:
+            - "16030:16030"
+        depends_on:
+            - "hmaster"
+        volumes:
+            - "/tmp/hbase/logs:/usr/local/hbase/logs"
+    sql-server:
+        image: phoenix:5.0.0
+        container_name: sql-server
+        command: ["python", "/usr/local/phoenix/bin/queryserver.py"]
+        ports:
+            - "8765:8765"
+        depends_on:
+            - "hmaster"
+
+volumes:
+    hdfs-image:
+    hdfs-data:

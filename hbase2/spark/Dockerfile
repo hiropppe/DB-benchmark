@@ -1,6 +1,16 @@
-FROM hbase/base:2.0.1
+FROM hbase/common:2.0.2
 
 WORKDIR /root
+
+# Install Scala
+RUN wget https://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.deb \
+ && dpkg -i scala-2.11.8.deb
+
+# Install SBT
+RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list \
+ && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823 \
+ && apt-get update \
+ && apt-get install -y sbt
 
 # spark
 RUN curl -s https://archive.apache.org/dist/spark/spark-2.3.1/spark-2.3.1-bin-without-hadoop.tgz | tar -xz -C /usr/local/ \
