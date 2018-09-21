@@ -66,17 +66,18 @@ RUN echo '# JDK' >> ~/.bashrc \
 RUN wget https://downloads.lightbend.com/scala/2.11.12/scala-2.11.12.deb \
  && dpkg -i scala-2.11.12.deb
 
-RUN curl -s http://ftp.kddilabs.jp/infosystems/apache/kafka/1.1.1/kafka_2.11-1.1.1.tgz | tar -xz -C /usr/local/ \
- && cd /usr/local \
- && ln -s kafka_2.11-1.1.1/ kafka
-
 RUN pip3 install -U pip
 RUN pip3 install --no-cache-dir -U setuptools
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
-        Scrapy \
+        Scrapy==1.5.1 \
         frontera[distributed,zeromq,kafka,sql,hbase] \
+        crontab==0.22.2 \
+        feedparser==5.2.1 \
+        phoenixdb==0.7 \
+        rfc3986==1.1.0 \
+        tldextract==2.2.0 \
         jedi \
         flake8 \
         autopep8 \
@@ -94,4 +95,20 @@ RUN mkdir -p /root/.vim/bundle \
  
 COPY ./vimrc /root/.vimrc
 
+COPY docker-entrypoint.sh /
+RUN chown root:root /docker-entrypoint.sh && chmod 700 /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["/bin/bash"]
+
 WORKDIR /root
+
+COPY frontera frontera
+RUN pip3 uninstall -y frontera
+RUN cd frontera \
+ && python3 setup.py develop
+
+COPY frontera-spiders frontera-spiders
+
+WORKDIR /root/frontera-spiders
+

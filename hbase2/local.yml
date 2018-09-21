@@ -1,5 +1,7 @@
-## For first time you must format HDFS by following command.
-# docker run --rm -v hbase2_hdfs-image:/var/hadoop/dfs/name hdfs/name:3.0.3 namenode -format -force
+# For first time you must format HDFS by following command.
+# $ docker run --rm -v hbase2_hdfs-image:/var/hadoop/dfs/name hdfs/name:3.0.3 namenode -format -force
+# Delete hdfs data volume if you want to clean hdfs in the middle of work also.
+# $ docker volume rm hbase2_hdfs-data 
 version: '3.0'
 services:
     name:
@@ -50,6 +52,7 @@ services:
         command: ["start"]
         ports:
             - "16010:16010"
+            - "9090:9090"
         depends_on:
             - "name"
             - "zookeeper"

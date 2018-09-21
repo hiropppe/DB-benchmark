@@ -1,18 +1,34 @@
 version: '3.0'
 services:
-    dbw:
+    batch0:
         image: frontera:latest
-        container_name: dbw
-        command: ["python3", "-m", "frontera.worker.db", "--config", "bfs.config.dbw", "--partitions", "0"]
-    sw:
+        container_name: batch0
+        tty: true
+    batch1:
         image: frontera:latest
-        container_name: dbw
-        command: ["python3", "-m", "frontera.worker.strategy", "--config", "bfs.config.sw", "--partition-id", "0"]
-        depends_on:
-            - "dbw"
-    spider:
+        container_name: batch1
+        tty: true
+    consumer0:
         image: frontera:latest
-        container_name: spider
-        command: ["scrapy", "crawl", "bfs", "-L", "INFO", "-s", "SPIDER_PARTITION_ID=0"]
-        depends_on:
-            - "sw"
+        container_name: consumer0
+        tty: true
+    consumer1:
+        image: frontera:latest
+        container_name: consumer1
+        tty: true
+    strategy0:
+        image: frontera:latest
+        container_name: strategy0
+        tty: true
+    strategy1:
+        image: frontera:latest
+        container_name: strategy1
+        tty: true
+    spider0:
+        image: frontera:latest
+        container_name: spider0
+        tty: true
+    spider1:
+        image: frontera:latest
+        container_name: spider1
+        tty: true
